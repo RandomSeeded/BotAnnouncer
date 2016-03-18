@@ -2,17 +2,7 @@ var _settings = require('./settings.js');
 var krakenAPI = require('./krakenAPI.js');
 var tmiAPI = require('./tmiAPI.js');
 
-// Retrieve information on the top games and streamers
-var getSuspicious = function() {
-  return krakenAPI.getGameList(_settings.numGames)
-  .then(function(gameList) {
-    return getTopStreamsForGames(gameList)
-  })
-  .then(function(gameList) {
-    return getStreamInformation(gameList);
-  })
-};
-
+// Execution of script
 console.log('Searching for suspicious channels...');
 getSuspicious()
 .then(function(results) {
@@ -29,8 +19,19 @@ getSuspicious()
   }, _settings.confirmTimeout);
 })
 
+// Uses APIs to get information on the top games & streamers
+function getSuspicious() {
+  return krakenAPI.getGameList(_settings.numGames)
+  .then(function(gameList) {
+    return getTopStreamsForGames(gameList)
+  })
+  .then(function(gameList) {
+    return getStreamInformation(gameList);
+  })
+};
+
 // Retrieves information regarding what the top streamers are for the given games
-getTopStreamsForGames = function(gameList) {
+function getTopStreamsForGames(gameList) {
   var promises = [];
   for (var i = 0; i < gameList.top.length; i++) {
     promises.push(krakenAPI.getStreamerList(gameList.top[i].game.name, _settings.numStreamersPerGame));
@@ -46,7 +47,7 @@ getTopStreamsForGames = function(gameList) {
 };
 
 // Retrieves information for all of the provided streams
-getStreamInformation = function(gameList) {
+function getStreamInformation(gameList) {
   var promises = [];
 
   for (var i = 0; i < gameList.length; i++) {
@@ -70,7 +71,7 @@ getStreamInformation = function(gameList) {
   return Promise.all(promises);
 }
 
-saveSuspicious = function(results) {
+function saveSuspicious(results) {
   var suspicious = results.filter(function(element) {
     return element.ratio < _settings.ratioThreshold && element.viewerCount > _settings.viewerThreshold;
   });
@@ -84,7 +85,7 @@ saveSuspicious = function(results) {
   return results;
 }
 
-compareSuspicious = function(results1, results2) {
+function compareSuspicious(results1, results2) {
   var confirmed = [];
   for (var streamer in results1) {
     if (results2[streamer]) {
