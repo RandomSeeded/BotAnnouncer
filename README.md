@@ -4,6 +4,10 @@ Inspired by https://twitter.com/botdetectorbot
 
 This goes through the most popular Twitch streamers for the top games, and engages in public ~~shaming~~ service announcements.
 
+## Result:
+
+![Results of bot detection](/results.png?raw=true)
+
 ## Usage:
 
 Make any changes you want to settings.js, then simply run: 
