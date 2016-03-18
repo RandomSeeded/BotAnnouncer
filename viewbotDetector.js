@@ -3,15 +3,30 @@ var krakenAPI = require('./krakenAPI.js');
 var tmiAPI = require('./tmiAPI.js');
 
 // Retrieve information on the top games and streamers
-krakenAPI.getGameList(_settings.numGames)
-.then(function(gameList) {
-  return getTopStreamsForGames(gameList)
-})
-.then(function(gameList) {
-  return getStreamInformation(gameList);
-})
+var getSuspicious = function() {
+  return krakenAPI.getGameList(_settings.numGames)
+  .then(function(gameList) {
+    return getTopStreamsForGames(gameList)
+  })
+  .then(function(gameList) {
+    return getStreamInformation(gameList);
+  })
+};
+
+console.log('Searching for suspicious channels...');
+getSuspicious()
 .then(function(results) {
-  handleResults(results);
+  var suspicious1 = saveSuspicious(results);
+  console.log('Waiting to confirm suspicious channels...');
+
+  setTimeout(function() {
+    console.log('Confirming suspicious channels...');
+    getSuspicious()
+    .then(function(results) {
+      var suspicious2 = saveSuspicious(results);
+      compareSuspicious(suspicious1, suspicious2);
+    });
+  }, _settings.confirmTimeout);
 })
 
 // Retrieves information regarding what the top streamers are for the given games
@@ -55,20 +70,35 @@ getStreamInformation = function(gameList) {
   return Promise.all(promises);
 }
 
-handleResults = function(results) {
+saveSuspicious = function(results) {
   var suspicious = results.filter(function(element) {
     return element.ratio < _settings.ratioThreshold && element.viewerCount > _settings.viewerThreshold;
-  }).sort(function(a, b) {
+  });
+
+  var results = {};
+  suspicious.forEach(function(element) {
+    element.percentFalse = Math.floor(10000 * (1 - element.ratio)) / 100;
+    results[element.channelName] = element;
+  });
+
+  return results;
+}
+
+compareSuspicious = function(results1, results2) {
+  var confirmed = [];
+  for (var streamer in results1) {
+    if (results2[streamer]) {
+      confirmed.push(results2[streamer]); // Use the most recent results
+    }
+  }
+  confirmed.sort(function(a, b) {
     return b.falseViewers - a.falseViewers;
   });
 
-  console.log('SUSPICIOUS');
-  suspicious.forEach(function(element) {
-    var percentFalse = Math.floor(10000 * (1 - element.ratio)) / 100;
-    console.log(element.channelName,"has",element.falseViewers,"false viewers ("+percentFalse+"%)");
+  console.log("Channels with confirmed false viewers:");
+  confirmed.forEach(function(element) {
+    console.log("["+element.gameName+"]",element.channelName,"has",element.falseViewers,"false viewers ("+element.percentFalse+"%) | http://twitch.tv/"+element.channelName);
   });
-  
-}
-
+};
 
 
