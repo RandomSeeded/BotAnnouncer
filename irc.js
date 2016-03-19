@@ -1,9 +1,10 @@
 var irc = require('tmi.js');
+var _settings = require('./settings.js');
 var _config = require('./ircConfig.js');
 
 var clientOptions = {
   options: {
-    debug: false
+    debug: _settings.ircDebug
   },
   identity: {
     username: _config.username,
@@ -32,7 +33,7 @@ var makeAnnouncements = module.exports.makeAnnouncements = function(announcement
         .then(function() {
           resolve();
         });
-      }, 2000); // Timeout is used to prevent 'sent too fast' prevention of message sending
+      }, _settings.ircMessageTimeout); // Timeout is used to prevent 'sent too fast' prevention of message sending
     });
 
     return secondMessage;
