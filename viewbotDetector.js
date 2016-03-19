@@ -1,28 +1,44 @@
+// Imports
 var _settings = require('./settings.js');
 var krakenAPI = require('./krakenAPI.js');
 var tmiAPI = require('./tmiAPI.js');
+var crontab = require('node-crontab');
 
-var irc = (process.argv[2] === '--irc') || (process.argv[2] === '-i');
+// Flag-reading
+var irc = process.argv.indexOf('--irc') !== -1 || process.argv.indexOf('-i') !== -1;
+var repeat = process.argv.indexOf('--repeat') !== -1 || process.argv.indexOf('-r') !== -1;
 if (irc) {
   var ircClient = require('./irc.js');
 }
+console.log("IRC Enabled:", irc);
+console.log("Repeat Execution:", repeat);
 
-// Execution of script
-console.log('Searching for suspicious channels...');
-getSuspicious()
-.then(function(results) {
-  var suspicious1 = saveSuspicious(results);
-  console.log('Waiting to confirm suspicious channels...');
+// High-level script functionality
+var execute = function() {
+  console.log('Searching for suspicious channels...');
+  getSuspicious()
+  .then(function(results) {
+    var suspicious1 = saveSuspicious(results);
+    console.log('Waiting to confirm suspicious channels...');
 
-  setTimeout(function() {
-    console.log('Confirming suspicious channels...');
-    getSuspicious()
-    .then(function(results) {
-      var suspicious2 = saveSuspicious(results);
-      compareSuspicious(suspicious1, suspicious2);
-    });
-  }, _settings.confirmTimeout);
-})
+    setTimeout(function() {
+      console.log('Confirming suspicious channels...');
+      getSuspicious()
+      .then(function(results) {
+        var suspicious2 = saveSuspicious(results);
+        compareSuspicious(suspicious1, suspicious2);
+      });
+    }, _settings.confirmTimeout);
+  })
+};
+
+// Invoke execution, periodically if requested
+execute();
+if (repeat) {
+  setInterval(function() {
+    execute();
+  },_settings.cronTimeout);
+}
 
 // Uses APIs to get information on the top games & streamers
 function getSuspicious() {
