@@ -1,7 +1,11 @@
 var _settings = require('./settings.js');
 var krakenAPI = require('./krakenAPI.js');
 var tmiAPI = require('./tmiAPI.js');
-var ircClient = require('./irc.js');
+
+var irc = (process.argv[2] === '--irc') || (process.argv[2] === '-i');
+if (irc) {
+  var ircClient = require('./irc.js');
+}
 
 // Execution of script
 console.log('Searching for suspicious channels...');
@@ -104,10 +108,12 @@ function compareSuspicious(results1, results2) {
   });
 
   // Output to relevant IRC channels
-  ircClient.makeAnnouncements(confirmed)
-  .then(function() {
-    ircClient.disconnect();
-  });
+  if (irc) {
+    ircClient.makeAnnouncements(confirmed)
+    .then(function() {
+      ircClient.disconnect();
+    });
+  }
 };
 
 

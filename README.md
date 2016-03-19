@@ -10,10 +10,17 @@ This goes through the most popular Twitch streamers for the top games, and engag
 
 ## Usage:
 
+**For local checking:**
+1. npm install
+2. (Optional) Edit settings.js if you want
+3. Run "node viewbotDetector.js"
+
+**With IRC module enabled:**
+
 1. npm install
 2. Rename ircConfig.example.js to ircConfig.js, and complete with your username and Twitch oauth key
-3. Edit settings.js if you feel like it
-4. Run node viewbotDetector.js
+3. (Optional) Edit settings.js
+4. Run "node viewbotDetector.js --irc" or "node viewbotDetector.js -i"
 
 ## Things to be done in the future:
 

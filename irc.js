@@ -28,11 +28,11 @@ var makeAnnouncements = module.exports.makeAnnouncements = function(announcement
   .then(function() {
     var secondMessage = new Promise(function(resolve, reject) {
       setTimeout(function() {
-        client.say(channel, "False positive? Want to learn more? Check out https://github.com/RandomSeeded/BotAnnouncer")
+        client.say(channel, "False positive? Want to learn more? GitHub link is in profile.")
         .then(function() {
           resolve();
         });
-      }, 1000); // Timeout is used to prevent 'sent too fast' prevention of message sending
+      }, 2000); // Timeout is used to prevent 'sent too fast' prevention of message sending
     });
 
     return secondMessage;
