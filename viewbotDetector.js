@@ -1,6 +1,7 @@
 var _settings = require('./settings.js');
 var krakenAPI = require('./krakenAPI.js');
 var tmiAPI = require('./tmiAPI.js');
+var ircClient = require('./irc.js');
 
 // Execution of script
 console.log('Searching for suspicious channels...');
@@ -96,9 +97,16 @@ function compareSuspicious(results1, results2) {
     return b.falseViewers - a.falseViewers;
   });
 
+  // Output confirmed viewbotted channels to console
   console.log("Channels with confirmed false viewers:");
   confirmed.forEach(function(element) {
     console.log("["+element.gameName+"]",element.channelName,"has",element.falseViewers,"false viewers ("+element.percentFalse+"%) | http://twitch.tv/"+element.channelName);
+  });
+
+  // Output to relevant IRC channels
+  ircClient.makeAnnouncements(confirmed)
+  .then(function() {
+    ircClient.disconnect();
   });
 };
 

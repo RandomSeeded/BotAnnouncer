@@ -1,2 +1,4 @@
 *.swp
-*.config
+ircConfig.js
+node_modules/
+
