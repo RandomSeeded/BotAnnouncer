@@ -2,7 +2,6 @@
 var _settings = require('./settings.js');
 var krakenAPI = require('./krakenAPI.js');
 var tmiAPI = require('./tmiAPI.js');
-var crontab = require('node-crontab');
 
 // Flag-reading
 var irc = process.argv.indexOf('--irc') !== -1 || process.argv.indexOf('-i') !== -1;

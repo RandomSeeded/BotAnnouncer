@@ -1,0 +1,23 @@
+{
+  "name": "botannouncer",
+  "version": "1.0.0",
+  "description": "Scans for viewbots and engages in public shaming",
+  "main": "viewbotAnnouncer.js",
+  "dependencies": {
+    "tmi.js": "0.0.28"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RandomSeeded/BotAnnouncer.git"
+  },
+  "author": "Nate Willard",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RandomSeeded/BotAnnouncer/issues"
+  },
+  "homepage": "https://github.com/RandomSeeded/BotAnnouncer#readme"
+}
