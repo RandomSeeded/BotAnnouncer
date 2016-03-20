@@ -13,7 +13,8 @@ if (irc) {
 console.log("IRC Enabled:", irc);
 console.log("Repeat Execution:", repeat);
 
-// High-level script functionality
+// Gets lists of suspicious users twice, with significant timeout between
+// This cuts down on false positives due to channels going offline
 var execute = function() {
   console.log('Searching for suspicious channels...');
   getSuspicious()
@@ -32,7 +33,6 @@ var execute = function() {
   })
 };
 
-// Invoke execution, periodically if requested
 execute();
 if (repeat) {
   setInterval(function() {

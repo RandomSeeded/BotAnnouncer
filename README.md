@@ -11,6 +11,7 @@ This goes through the most popular Twitch streamers for the top games, and engag
 ## Usage:
 
 **For local checking:**
+
 1. npm install
 2. (Optional) Edit settings.js if you want
 3. Run "node viewbotDetector.js"
@@ -22,6 +23,11 @@ This goes through the most popular Twitch streamers for the top games, and engag
 3. (Optional) Edit settings.js
 4. Run "node viewbotDetector.js --irc" or "node viewbotDetector.js -i"
 
+**Flags:**
+
+* --irc (or -i): will load and utilize the IRC module, and announce viewbot results in Twitch Chat
+* --repeat (or -r): re-runs the program periodically
+
 ## Things to be done in the future:
 
 1. ~~An IRC module which will engage in the actual public shaming service announcements. This will go into the IRC channel of the viewbotting streamer in question and make a notice informing the chat of the botting.~~ **Done**
@@ -29,7 +35,7 @@ This goes through the most popular Twitch streamers for the top games, and engag
   * Hosting of the stream on 3rd party sites
   * ~~Streams that have just started/closed down can have misleading counts (double-check after period of time)~~ **Done**
   * Other? Let me know!
-3. Modification such that this can be run as permanent process, sans cron-job
+3. ~~Modification such that this can be run as permanent process, sans cron-job~~ **Done**
 
 ## Miscellanea:
 

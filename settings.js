@@ -6,5 +6,6 @@ module.exports = {
   confirmTimeout: 180000, // Time in milliseconds to wait before confirming results
   cronTimeout: 3600000,
   ircDebug: true,
-  ircMessageTimeout: 2000
+  ircMessageTimeout: 2000,
+  ircChannelTimeout: 15000
 };
